@@ -1,15 +1,12 @@
-// app/layout.js
 import "./globals.css";
-
-export const metadata = {
-  title: "EYEGO",
-  description: "Dashboard App",
-};
+import { ReduxProvider } from "./store/Providers";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ReduxProvider>{children}</ReduxProvider>
+      </body>
     </html>
   );
 }
