@@ -2,8 +2,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../api/users";
-import { useRouter } from "next/navigation";
-
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import * as XLSX from "xlsx";
 export default function UsersPage() {
   const dispatch = useDispatch();
   const { users, status } = useSelector((state) => state.users);
@@ -20,11 +21,44 @@ export default function UsersPage() {
     return <p className="text-center mt-10">No users found.</p>;
   }
 
-  const exportExcel = () => {
-    console.log("expored excel");
+  const exportPdf = (users) => {
+    const doc = new jsPDF("l", "pt", "a3");
+    doc.setFontSize(16);
+    doc.text("Eyego Users", doc.internal.pageSize.getWidth() / 2, 30, {
+      align: "center",
+    });
+
+    doc.setFontSize(12);
+
+    users.forEach(function (user, i) {
+      const x = 60 + i * 60;
+
+      const date = new Date(user.created_at.replace(" ", "T"));
+      const formattedDate = date.toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      doc.text(`Name: ${user.name || ""}`, 50, y);
+      doc.text(`Signed in at: ${formattedDate}`, 50, y + 15);
+      doc.text(`Age: ${user.age || ""}`, 50, y + 30);
+      doc.text(`Gender: ${user.gender || ""}`, 50, y + 45);
+      doc.text(`Money: ${user.money || ""}`, 250, y);
+      doc.text(`Orders: ${user.orders || ""}`, 250, y + 15);
+      doc.text(`Pending Issues: ${user.pending_Issues || ""}`, x + 30, 200);
+    });
+
+    doc.save(`Eyego_users.pdf`);
   };
-  const exportPdf = () => {
-    console.log("expored pdf", users);
+
+  const exportExcel = (users) => {
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(users);
+    XLSX.utils.book_append_sheet(wb, ws, "Eyego Users");
+    XLSX.writeFile(wb, "Eyego_users.xlsx");
   };
 
   return (
@@ -33,19 +67,19 @@ export default function UsersPage() {
       <div className="flex gap-4">
         <button
           className="mb-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer"
-          onClick={() => exportExcel()}
-        >
-          Export Excel
-        </button>
-        <button
-          className="mb-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer"
-          onClick={() => exportPdf()}
+          onClick={() => exportPdf(users)}
         >
           Export Pdf
         </button>
+        <button
+          className="mb-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 hover:cursor-pointer"
+          onClick={() => exportExcel(users)}
+        >
+          Export Excel
+        </button>
       </div>
 
-      {/* ✅ Desktop Table */}
+      {/* ✅ Table */}
       <div className="overflow-auto shadow-xl rounded-2xl hidden md:block">
         <table className="w-full">
           <thead className="bg-gray-50 border-b-2 border-gray-200">
@@ -100,45 +134,6 @@ export default function UsersPage() {
             })}
           </tbody>
         </table>
-      </div>
-
-      {/* ✅ Mobile Cards */}
-      <div className="grid grid-cols-1 gap-4 md:hidden">
-        {users.map((user) => {
-          const date = new Date(user.created_at.replace(" ", "T"));
-          return (
-            <div key={user.id} className="bg-white p-4 rounded-lg shadow">
-              <div className="text-sm text-gray-700">
-                <strong>Name:</strong> {user.name}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Signed in:</strong>{" "}
-                {date.toLocaleString("en-GB", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Age:</strong> {user.age}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Gender:</strong> {user.gender}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Money:</strong> {user.money}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Orders:</strong> {user.orders}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Pending Issues:</strong> {user.pending_Issues}
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );
