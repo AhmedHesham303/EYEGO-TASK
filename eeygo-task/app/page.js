@@ -1,10 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAdmin } from "./store/slices/authSlice";
 import { useRouter } from "next/navigation";
-
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +26,7 @@ export default function LoginPage() {
       }
     });
   };
+
   return (
     <div className="w-full h-[100vh] flex flex-col justify-center items-center bg-white px-4">
       <Image

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Sidebar() {
+export default function Sidebar({ className = "" }) {
   const items = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Users", href: "/dashboard/users" },
@@ -11,14 +11,17 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-white border-r  flex flex-col ">
-      <div className="flex items-center justify-center">
+    <aside className={`w-64 bg-white border-r flex flex-col ${className}`}>
+      <div className="flex items-center justify-center py-4 border-b">
         <Image src="/eyegoai_logo.jpeg" alt="Logo" width={120} height={40} />
       </div>
-      <ul className="p-8 flex flex-col gap-4 text-lg ">
+      <ul className="p-8 flex flex-col gap-4 text-lg">
         {items.map((item) => (
           <li key={item.href}>
-            <Link href={item.href} className="hover:text-blue-600 font-medium">
+            <Link
+              href={item.href}
+              className="hover:text-blue-600 font-medium transition-colors"
+            >
               {item.name}
             </Link>
           </li>
