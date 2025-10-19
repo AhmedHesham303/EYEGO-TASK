@@ -6,12 +6,24 @@ const initialState = {
   users: [],
   status: "idle",
   error: null,
+  currentPage: 1,
+  usersPerPage: 2,
 };
 
 const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    onNavigateNext: (state) => {
+      state.currentPage++;
+    },
+    onNavigatePrev: (state) => {
+      state.currentPage--;
+    },
+    onChangeUsersPerPage: (state, action) => {
+      state.usersPerPage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
@@ -19,7 +31,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.users = action.payload;
+        state.users = action.payload.data;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.status = "failed";
