@@ -7,7 +7,6 @@ export default function Sidebar({ className = "" }) {
   const items = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Users", href: "/dashboard/users" },
-    { name: "Analytics", href: "/dashboard/analytics" },
   ];
 
   return (

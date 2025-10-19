@@ -7,7 +7,7 @@ const initialState = {
   status: "idle",
   error: null,
   currentPage: 1,
-  usersPerPage: 2,
+  usersPerPage: 1,
 };
 
 const userSlice = createSlice({
