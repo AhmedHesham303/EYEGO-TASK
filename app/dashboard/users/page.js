@@ -33,7 +33,7 @@ export default function UsersPage() {
     doc.setFontSize(12);
 
     users.forEach(function (user, i) {
-      const x = 60 + i * 60;
+      const y = 60 + i * 60;
 
       const date = new Date(user.created_at.replace(" ", "T"));
       const formattedDate = date.toLocaleString("en-GB", {
@@ -50,7 +50,7 @@ export default function UsersPage() {
       doc.text(`Gender: ${user.gender || ""}`, 50, y + 45);
       doc.text(`Money: ${user.money || ""}`, 250, y);
       doc.text(`Orders: ${user.orders || ""}`, 250, y + 15);
-      doc.text(`Pending Issues: ${user.pending_Issues || ""}`, x + 30, 200);
+      doc.text(`Pending Issues: ${user.pending_Issues || ""}`, 250, y + 45);
     });
 
     doc.save(`Eyego_users.pdf`);
