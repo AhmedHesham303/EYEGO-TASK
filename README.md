@@ -76,8 +76,12 @@ To build and run the app using Docker:
 docker build -t dashboard-app .
 docker run -p 3000:3000 dashboard-app
 
-The app will be available at http://localhost:3000
-.
+The app will be available at http://localhost:3000.
+
+// login crendentials :
+  ahmedhesham@gmail.com
+  24700956
+
 
 🧩 4. Features Overview
 
