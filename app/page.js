@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAdmin } from "./store/slices/authSlice";
 import { useRouter } from "next/navigation";
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,12 +13,9 @@ export default function LoginPage() {
 
   const { loading, error } = useSelector((state) => state.admin);
 
-  const handelLoginEvent = (e) => {
+  const handleLoginEvent = (e) => {
     e.preventDefault();
-    let adminCredential = {
-      email,
-      password,
-    };
+    const adminCredential = { email, password };
     dispatch(loginAdmin(adminCredential)).then((result) => {
       if (result.payload) {
         setEmail("");
@@ -34,29 +32,40 @@ export default function LoginPage() {
         alt="Logo"
         width={150}
         height={80}
-        className="mb-4"
+        className="mb-6"
       />
 
-      <div className="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-slate-100 w-/1/2  md:w-1/3 lg:w-1/4 mx-auto">
+      <div className="bg-blue-50 border border-blue-200 rounded-xl shadow-sm mb-6 px-6 py-4 text-center w-full max-w-sm">
+        <h2 className="text-lg font-semibold text-blue-700 mb-2">
+          Test Login Credentials
+        </h2>
+        <p className="text-sm text-gray-700">
+          <strong>Email:</strong> ahmedhesham@gmail.com
+        </p>
+        <p className="text-sm text-gray-700">
+          <strong>Password:</strong> 24700956
+        </p>
+      </div>
+
+      {/* Login Form */}
+      <div className="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-slate-200 w-full max-w-sm">
         <form
-          onSubmit={handelLoginEvent}
-          className="flex items-center justify-center text-black flex-col gap-4 w-full"
+          onSubmit={handleLoginEvent}
+          className="flex flex-col gap-4 text-black"
         >
           <div className="w-full">
-            <label className="text-xs md:text-md  font-light md:font-medium text-slate-700">
-              Email
-            </label>
+            <label className="text-sm font-medium text-slate-700">Email</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-1 py-1 md:px-3 md-py-3  border border-slate-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm md:text-sm"
+              className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
 
           <div className="w-full">
-            <label className="text-xs md:text-md  font-light md:font-medium text-slate-700">
+            <label className="text-sm font-medium text-slate-700">
               Password
             </label>
             <input
@@ -64,19 +73,20 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-1 py-1 md:px-3 md-py-3  border border-slate-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm md:text-sm"
+              className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
 
           <button
-            className="h-6 px-4 py-3 text-xs md:text-md md:h-9 md:px-8 md:py-4 md:text-lg flex items-center justify-center rounded-lg border border-transparent text-white bg-blue-600 hover:bg-blue-700 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 active:scale-95"
             type="submit"
+            disabled={loading}
+            className="mt-2 h-10 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 active:scale-95"
           >
             {loading ? "Loading..." : "Login"}
           </button>
 
           {error && (
-            <div className="text-red-600" role="alert">
+            <div className="text-red-600 text-sm text-center" role="alert">
               {error}
             </div>
           )}
